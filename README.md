@@ -2,7 +2,7 @@
 
 Altere seu IP Dinâmico automaticamente em uma entrada DNS de um domínio hospedado na Cloudflare.
 
-Forneça dados de sua conta cloudflare no arquivo config.env
+Forneça dados de sua conta cloudflare no arquivo **config.env
 
 Exemplo subdomínio Cloudflare home.example.com
 
