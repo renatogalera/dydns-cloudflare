@@ -1,6 +1,6 @@
 ## DynDNS Cloudflare update
 
-Atualize IP Dinâmico automaticamente em uma entrada DNS de um domínio hospedado na Cloudflare.
+Altere seu IP Dinâmico automaticamente em uma entrada DNS de um domínio hospedado na Cloudflare.
 
 Altere config.env
 
