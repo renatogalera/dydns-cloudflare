@@ -4,7 +4,7 @@ Altere seu IP Dinâmico automaticamente em uma entrada DNS de um domínio hosped
 
 Forneça dados de sua conta cloudflare no arquivo **config.env**
 
-Exemplo subdomínio Cloudflare home.example.com
+Exemplo de configuração utilizando subdomínio **home.example.com**
 
 ```
 CF_API_KEY=SUAAPIKEY
