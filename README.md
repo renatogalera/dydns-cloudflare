@@ -14,7 +14,6 @@ DOMAIN=example.com
 ```
 
 - Instalação
-Com Go instalado
 
 ```
 git clone https://github.com/renatoguilhermini/dydns-cloudflare-update-go
