@@ -35,4 +35,6 @@ chmod +x dyndns-cloudflare
 
 Em linux, criar tarefa no crontab. Obs: Não esqueça de apontar para diretório correto
 
-crontab -l | { cat; echo "*/3 * * * * **dir/**dydns-cloudflare-update-go/dyndns-cloudflare"; } | crontab -
+```
+crontab -l | { cat; echo "*/3 * * * * dir/dydns-cloudflare-update-go/dyndns-cloudflare"; } | crontab -
+```
