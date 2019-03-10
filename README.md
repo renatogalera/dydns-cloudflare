@@ -1,12 +1,6 @@
 ## DynDNS Cloudflare update
 
-Utilize IP Dinâmico e atualize automaticamente entrada DNS de um domínio hospedado na Cloudflare.
-
-- Instalação
-
-```
-git clone https://github.com/renatoguilhermini/dydns-cloudflare-update-go
-```
+Atualize IP Dinâmico automaticamente em uma entrada DNS de um domínio hospedado na Cloudflare.
 
 Altere config.env
 
@@ -19,9 +13,12 @@ SUBDOMAIN=home
 DOMAIN=example.com
 ```
 
+- Instalação
 Com Go instalado
 
 ```
+git clone https://github.com/renatoguilhermini/dydns-cloudflare-update-go
+
 cd dydns-cloudflare-update-go
 
 go get github.com/cloudflare/cloudflare-go
