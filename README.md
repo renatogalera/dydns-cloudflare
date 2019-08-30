@@ -16,6 +16,7 @@ DOMAIN=example.com
 - Instalação
 
 ```
+go get github.com/manifoldco/promptui
 
 go get github.com/cloudflare/cloudflare-go
 
