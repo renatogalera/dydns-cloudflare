@@ -57,7 +57,7 @@ func loadConfig() error {
 func checaIPDNS(target string) {
 	resolver := dns_resolver.New([]string{"1.1.1.1"})
 	resolver.RetryTimes = 5
-	ip, err := resolver.LookupHost("casa.dedicado.co")
+	ip, err := resolver.LookupHost(SUBDOMAIN + "." + DOMAIN)
 	
 	if err != nil {
 		log.Fatal(err.Error())
