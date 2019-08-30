@@ -16,13 +16,13 @@ DOMAIN=example.com
 - Instalação
 
 ```
-git clone https://github.com/renatoguilhermini/dydns-cloudflare-update-go
-
 cd dydns-cloudflare-update-go
 
 go get github.com/cloudflare/cloudflare-go
 
 go get github.com/joho/godotenv
+
+go get github.com/bogdanovich/dns_resolver
 
 go build dyndns-cloudflare.go
 
