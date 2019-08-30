@@ -6,22 +6,75 @@ import (
 	"github.com/GlenDC/go-external-ip"
 	"github.com/cloudflare/cloudflare-go"
 	"github.com/joho/godotenv"
+	"github.com/manifoldco/promptui"
 	"log"
 	"os"
+	"path/filepath"
 )
 
 var DOMAIN string
 var CF_API_KEY string
 var CF_API_EMAIL string
 var SUBDOMAIN string
-var NEWIPADDR string
+
+func writeConfig(result string) {
+	f, err := os.OpenFile(dir(), os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		log.Fatal(err)
+	}
+	if _, err := f.Write([]byte(result)); err != nil {
+		log.Fatal(err)
+	}
+	if err := f.Close(); err != nil {
+		log.Fatal(err)
+	}
+}
+
+func menuAPIdata() (labelprompt string, result string) {
+	apidata := map[string]string{
+		"Set domain name": "DOMAIN",
+		"Set subdomain": "SUBDOMAIN",
+		"Set API Key": "CF_API_KEY",
+		"Set EMAIL": "CF_API_EMAIL",
+	}
+	for k, v := range apidata {
+		//fmt.Printf("%s %s\n", k, v)
+		labelprompt = k
+		prompt := promptui.Prompt{
+			Label:    labelprompt,
+		}
+		result, err := prompt.Run()
+		if err != nil {
+			fmt.Printf("Prompt failed %v\n", err)
+		}
+		writeConfig(v + "=" + result + "\n")
+	}
+
+	return
+}
+
+func dir() string {
+	dir, err := filepath.Abs(filepath.Dir(os.Args[0]))
+	if err != nil {
+	log.Fatal(err)
+	}
+	configdir := (dir + "/config.env")
+	return configdir
+}
 
 func loadConfig() error {
-
-	err := godotenv.Load("config.env")
+	err := godotenv.Load(dir())
 	if err != nil {
-		log.Fatal("Error loading .env file")
+		fmt.Println("Error loading .env file, I would like to create?")
+		result := yesNo()
+		if result ==false {
+			os.Exit(0)
+		}else{
+			menuAPIdata()
+		}
 	}
+
+	_ = godotenv.Load(dir())
 
 	DOMAIN = os.Getenv("DOMAIN")
 	if DOMAIN == "" {
@@ -46,13 +99,19 @@ func loadConfig() error {
 		msg := fmt.Sprintf("Please, set variable SUBDOMAIN")
 		return errors.New(msg)
 	}
-
-	NEWIPADDR = os.Getenv("NEWIPADDR")
-	if NEWIPADDR == "" {
-		msg := fmt.Sprintf("Please, set variable NEWIPADDR")
-		return errors.New(msg)
-	}
 	return nil
+}
+
+func yesNo() bool {
+	prompt := promptui.Select{
+		Label: "Select [Yes/No]",
+		Items: []string{"Yes", "No"},
+	}
+	_, result, err := prompt.Run()
+	if err != nil {
+		log.Fatalf("Prompt failed %v\n", err)
+	}
+	return result == "Yes"
 }
 
 func dynDNS(target string) {
@@ -104,7 +163,7 @@ func updateRecord(zoneID string, api *cloudflare.API, newRecord *cloudflare.DNSR
 	}
 }
 
-func getMyIP(protocol int) string {
+func getMyIP() string {
 
 	consensus := externalip.DefaultConsensus(nil, nil)
 	ip, err := consensus.ExternalIP()
@@ -142,11 +201,11 @@ func main() {
 	}
 
 	for _, r := range recs {
-		if getMyIP(4) == r.Content {
+		if getMyIP() == r.Content {
 			fmt.Println("IP has not changed!")
 			os.Exit(0)
 		}else{
-			dynDNS(getMyIP(4))
+			dynDNS(getMyIP())
 		}
 	}
 }
