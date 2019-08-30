@@ -51,66 +51,60 @@ func loadConfig() error {
 		msg := fmt.Sprintf("É necessário configurar variável NEWIPADDR")
 		return errors.New(msg)
 	}
-
 	return nil
 }
 
 func checaIPDNS(target string) {
-
 	resolver := dns_resolver.New([]string{"1.1.1.1"})
-	// In case of i/o timeout
 	resolver.RetryTimes = 5
 	ip, err := resolver.LookupHost("casa.dedicado.co")
+	
 	if err != nil {
 		log.Fatal(err.Error())
 	}
+	
 	for _, ips := range ip {
 		dnsip := ips.String()
 		if target == dnsip {
 			fmt.Println("IP não mudou!")
 			os.Exit(0)
 		}else{
-			//fmt.Println(dnsip)
 			dynDNS(target)
 		}
 	}
 }
 
-func dynDNS(dnsip string) {
-	// API Cloudflare
+func dynDNS(target string) {
 	api, err := cloudflare.New(CF_API_KEY, CF_API_EMAIL)
 	if err != nil {
 		log.Fatal(err)
-
 	}
-
-	// API Cloudflare
+	
 	zoneID, err := api.ZoneIDByName(DOMAIN)
 	if err != nil {
 		log.Fatal(err)
 		return
 	}
-
-	// Criando entrada DNS
+	
 	newRecord := cloudflare.DNSRecord{
 		Type:    "A",
 		Name:    SUBDOMAIN + "." + DOMAIN,
-		Content: dnsip,
+		Content: target,
 	}
-
+	
 	updateRecord(zoneID, api, &newRecord)
 	log.Println("Setando entrada DNS:", newRecord.Name, newRecord.Content, "\n")
 }
 
 func updateRecord(zoneID string, api *cloudflare.API, newRecord *cloudflare.DNSRecord) {
-
 	dns := cloudflare.DNSRecord{Type: newRecord.Type, Name: newRecord.Name}
 	OLDRECORDS, err := api.DNSRecords(zoneID, dns)
+	
 	if err != nil {
 		log.Fatal(err)
 		return
 	}
-
+	
 	if len(OLDRECORDS) == 1 {
 		// Update
 		err := api.UpdateDNSRecord(zoneID, OLDRECORDS[0].ID, *newRecord)
@@ -120,7 +114,7 @@ func updateRecord(zoneID string, api *cloudflare.API, newRecord *cloudflare.DNSR
 		}
 		return
 	}
-
+	
 	_, err = api.CreateDNSRecord(zoneID, *newRecord)
 	if err != nil {
 		log.Fatal(err)
@@ -129,11 +123,13 @@ func updateRecord(zoneID string, api *cloudflare.API, newRecord *cloudflare.DNSR
 }
 
 func getMyIP(protocol int) string {
+	
 	var target string
+	
 	if protocol == 4 {
 		target = "http://ifconfig.me/ip"
-	//} else if protocol == 6 {
-	//	target = "http://ifconfig.me/ip" //Alterar para fonte ipv6
+		//} else if protocol == 6 {
+		//	target = "http://ifconfig.me/ip" //Alterar para fonte ipv6
 	}else{
 		os.Exit(0)
 	}
@@ -156,6 +152,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	
 	target := getMyIP(4)
 	checaIPDNS(target)
 }
