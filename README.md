@@ -16,13 +16,12 @@ DOMAIN=example.com
 - Instalação
 
 ```
-cd dydns-cloudflare-update-go
 
 go get github.com/cloudflare/cloudflare-go
 
 go get github.com/joho/godotenv
 
-go get github.com/bogdanovich/dns_resolver
+go get github.com/GlenDC/go-external-ip
 
 go build dyndns-cloudflare.go
 
