@@ -8,7 +8,7 @@ import (
 	"net/http"
 	"os"
 	"strings"
-
+	"github.com/bogdanovich/dns_resolver"
 	cloudflare "github.com/cloudflare/cloudflare-go"
 	"github.com/joho/godotenv"
 )
@@ -19,8 +19,7 @@ var CF_API_EMAIL string
 var SUBDOMAIN string
 var NEWIPADDR string
 
-func argParse() error {
-
+func loadConfig() error {
 	// Checa se arquivo config.env existe
 	err := godotenv.Load("config.env")
 	if err != nil {
@@ -52,45 +51,32 @@ func argParse() error {
 		msg := fmt.Sprintf("É necessário configurar variável NEWIPADDR")
 		return errors.New(msg)
 	}
-	// Criando arquivo novoip caso não exista
-	if _, err := os.Stat(NEWIPADDR); os.IsNotExist(err) {
-		os.OpenFile(NEWIPADDR, os.O_APPEND|os.O_CREATE|os.O_RDWR, 0644)
-	}
 
 	return nil
 }
 
-func checkIP() {
+func checaIPDNS(target string) {
 
-	log.Printf("Checando IP...\n")
-	IPV4 := getMyIP(4)
-	// IPV6 := getMyIP(6)
-
-	// Pesquisa IP no arquivo
-	OLDIPTMP, _ := ioutil.ReadFile(NEWIPADDR)
-	OLDIP := string(OLDIPTMP)
-
-	if OLDIP != IPV4 {
-		log.Printf("IP Mudou! Alterando: %s -> %s", OLDIP, IPV4)
-		dynDNS(IPV4)
-	} else {
-		log.Printf("IP Não mudou!\n")
-		os.Exit(0)
+	resolver := dns_resolver.New([]string{"1.1.1.1"})
+	// In case of i/o timeout
+	resolver.RetryTimes = 5
+	ip, err := resolver.LookupHost("casa.dedicado.co")
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+	for _, ips := range ip {
+		dnsip := ips.String()
+		if target == dnsip {
+			fmt.Println("IP não mudou!")
+			os.Exit(0)
+		}else{
+			//fmt.Println(dnsip)
+			dynDNS(target)
+		}
 	}
 }
 
-func dynDNS(IPV4 string) {
-
-	// Removendo referência antiga
-	os.Remove(NEWIPADDR)
-
-	//Salvando ipatual no arquivo
-	saveip, err := os.OpenFile(NEWIPADDR, os.O_APPEND|os.O_CREATE|os.O_RDWR, 0644)
-	defer saveip.Close()
-	if _, err = saveip.WriteString(IPV4); err != nil {
-		panic(err)
-	}
-
+func dynDNS(dnsip string) {
 	// API Cloudflare
 	api, err := cloudflare.New(CF_API_KEY, CF_API_EMAIL)
 	if err != nil {
@@ -109,7 +95,7 @@ func dynDNS(IPV4 string) {
 	newRecord := cloudflare.DNSRecord{
 		Type:    "A",
 		Name:    SUBDOMAIN + "." + DOMAIN,
-		Content: IPV4,
+		Content: dnsip,
 	}
 
 	updateRecord(zoneID, api, &newRecord)
@@ -146,14 +132,12 @@ func getMyIP(protocol int) string {
 	var target string
 	if protocol == 4 {
 		target = "http://ifconfig.me/ip"
-
-	} else if protocol == 6 {
-		target = "http://ifconfig.me/ip" //Alterar para fonte ipv6
-
-	} else {
-		return ""
-
+	//} else if protocol == 6 {
+	//	target = "http://ifconfig.me/ip" //Alterar para fonte ipv6
+	}else{
+		os.Exit(0)
 	}
+
 	resp, err := http.Get(target)
 
 	if err == nil {
@@ -161,20 +145,17 @@ func getMyIP(protocol int) string {
 		if err == nil {
 			defer resp.Body.Close()
 			return strings.TrimSpace(string(contents))
-
 		}
 
 	}
-	return ""
+	return target
 }
 
 func main() {
-
-	err := argParse()
+	err := loadConfig()
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	checkIP()
-
+	target := getMyIP(4)
+	checaIPDNS(target)
 }
