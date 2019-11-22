@@ -6,9 +6,15 @@ Provide your cloudflare account data in the file **config.env**
 
 Add your subdmain **home.example.com**
 
-- Install
+- Install local
 
 ```
+#First edit/create conf.env first
+
+cp config.env.example config.env
+
+vim config.env
+
 go mod download
 
 go build main.go
