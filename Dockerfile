@@ -2,7 +2,7 @@
 
 FROM golang:latest
 
-LABEL maintainer="Renato Guilhermini <contato@example.com>"
+LABEL maintainer="Renato Guilhermini <contact@example.com>"
 
 # Set the Current Working Directory inside the container
 WORKDIR /app
