@@ -9,6 +9,10 @@ Add your subdmain **home.example.com**
 - Install local
 
 ```
+git clone https://github.com/renatogalera/dydns-cloudflare
+
+cd dydns-cloudflare
+
 #First edit/create conf.env first
 
 cp config.env.example config.env
@@ -25,9 +29,9 @@ go build main.go
 - Docker Image run in background
 
 ```
-git clone https://github.com/renatogalera/dydns-cloudflare-update-go 
+git clone https://github.com/renatogalera/dydns-cloudflare 
 
-cd dydns-cloudflare-update-go
+cd dydns-cloudflare
 
 #First edit/create conf.env first
 
