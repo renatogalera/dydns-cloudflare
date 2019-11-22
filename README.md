@@ -1,5 +1,7 @@
 ## DynDNS Cloudflare update
 
+Auto update your Dynamic IP in Cloudflare DNS.
+
 Provide your cloudflare account data in the file **config.env**
 
 Add your subdmain **home.example.com**
