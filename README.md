@@ -13,7 +13,7 @@ git clone https://github.com/renatogalera/dydns-cloudflare
 
 cd dydns-cloudflare
 
-#First edit/create conf.env first
+#First edit/create config.env 
 
 cp config.env.example config.env
 
@@ -31,7 +31,7 @@ git clone https://github.com/renatogalera/dydns-cloudflare
 
 cd dydns-cloudflare
 
-#First edit/create conf.env first
+#First edit/create config.env
 
 cp config.env.example config.env
 

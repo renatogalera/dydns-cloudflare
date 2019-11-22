@@ -94,12 +94,12 @@ func dynDNS() {
 	PARTS := strings.SplitAfterN(DOMAIN, ".", 2)
 	api, err := cloudflare.New(CF_API_KEY, CF_API_EMAIL)
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
 	}
 	DOMAINSPLIT := PARTS[1]
 	zoneID, err := api.ZoneIDByName(DOMAINSPLIT)
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
 		return
 	}
 	//Check ip change
@@ -126,20 +126,20 @@ func updateRecord(zoneID string, api *cloudflare.API, newRecord *cloudflare.DNSR
 	DNSRecordIP := cloudflare.DNSRecord{Type: newRecord.Type, Name: newRecord.Name}
 	oldRecords, err := api.DNSRecords(zoneID, DNSRecordIP)
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
 		return
 	}
 	if len(oldRecords) == 1 {
 		err := api.UpdateDNSRecord(zoneID, oldRecords[0].ID, *newRecord)
 		if err != nil {
-			log.Fatal(err)
+			log.Println(err)
 			return
 		}
 		return
 	}
 	_, err = api.CreateDNSRecord(zoneID, *newRecord)
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
 		return
 	}
 }
@@ -148,7 +148,7 @@ func getMyIP() string {
 	consensus := externalip.DefaultConsensus(nil, nil)
 	currentIP, err := consensus.ExternalIP()
 	if err != nil {
-		log.Fatal("Error collecting external IP", err)
+		log.Println("Error collecting external IP", err)
 	}
 	TARGETIP := currentIP.String()
 	return TARGETIP
@@ -158,7 +158,7 @@ func main() {
 	log.SetOutput(os.Stdout)
 	err := loadConfig()
 	if err != nil {
-		log.Fatal("Error check ./config file", err)
+		log.Println("Error check ./config file", err)
 	}
 	for {
 		dynDNS()
