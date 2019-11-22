@@ -4,12 +4,12 @@ Change your Dynamic IP automatically in a DNS entry for a domain hosted on Cloud
 
 Provide your cloudflare account data in the file **config.env**
 
-Add your subdomain **home.example.com**
+Add your subdmain **home.example.com**
 
 ```
 CF_API_KEY=SUAAPIKEY
 CF_API_EMAIL=SEUEMAIL
-DOMAIN=example.com
+DOMAIN=home.example.com
 ```
 
 - Install
