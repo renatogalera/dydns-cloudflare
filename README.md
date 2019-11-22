@@ -2,7 +2,7 @@
 
 Change your Dynamic IP automatically in a DNS entry for a domain hosted on Cloudflare.
 
-Provide your cloudflare account data in the archive **config.env**
+Provide your cloudflare account data in the file **config.env**
 
 Add your subdomain **home.example.com**
 
