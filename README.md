@@ -1,19 +1,18 @@
 ## DynDNS Cloudflare update
 
-Altere seu IP Dinâmico automaticamente em uma entrada DNS de um domínio hospedado na Cloudflare.
+Change your Dynamic IP automatically in a DNS entry for a domain hosted on Cloudflare.
 
-Forneça dados de sua conta cloudflare no arquivo **config.env**
+Provide your cloudflare account data in the archive **config.env**
 
-Exemplo de configuração utilizando subdomínio **home.example.com**
+Add your subdomain **home.example.com**
 
 ```
 CF_API_KEY=SUAAPIKEY
 CF_API_EMAIL=SEUEMAIL
-SUBDOMAIN=home
 DOMAIN=example.com
 ```
 
-- Instalação
+- Install
 
 ```
 go get github.com/manifoldco/promptui
@@ -29,7 +28,7 @@ go build dyndns-cloudflare.go
 chmod +x dyndns-cloudflare
 ```
 
-Em linux, criar tarefa no crontab. Obs: Não esqueça de apontar para diretório correto
+In linux, create task in crontab. Note: Add your correct directory.
 
 ```
 crontab -l | { cat; echo "*/3 * * * * dir/dydns-cloudflare-update-go/dyndns-cloudflare"; } | crontab -
