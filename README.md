@@ -21,7 +21,11 @@ vim config.env
 
 docker build -t dyndns-cf-go .
 
-docker run -d dyndns-cf-go
+docker run -d --name dyndns-cf-go dyndns-cf-go
+
+#Check logs
+
+docker logs -f dyndns-cf-go
 ```
 
 - Install local

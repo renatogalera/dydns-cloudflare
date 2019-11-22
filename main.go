@@ -103,10 +103,7 @@ func getMyIP() string {
 
 func main() {
 	log.SetOutput(os.Stdout)
-	err := loadConfig()
-	if err != nil {
-		log.Println("Error check ./config file", err)
-	}
+	loadConfig()
 	for {
 		dynDNS()
 	}
