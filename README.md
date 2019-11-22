@@ -23,7 +23,7 @@ git clone https://github.com/renatogalera/dydns-cloudflare-update-go
 
 cd dydns-cloudflare-update-go
 
-#First create edit/create conf.env first
+#First edit/create conf.env first
 
 cp config.env.example config.env
 
