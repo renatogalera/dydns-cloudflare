@@ -6,30 +6,28 @@ Provide your cloudflare account data in the file **config.env**
 
 Add your subdmain **home.example.com**
 
-```
-CF_API_KEY=SUAAPIKEY
-CF_API_EMAIL=SEUEMAIL
-DOMAIN=home.example.com
-```
-
 - Install
 
 ```
-go get github.com/manifoldco/promptui
+go mod download
 
-go get github.com/cloudflare/cloudflare-go
-
-go get github.com/joho/godotenv
-
-go get github.com/GlenDC/go-external-ip
-
-go build dyndns-cloudflare.go
-
-chmod +x dyndns-cloudflare
+go build main.go
 ```
 
-In linux, create task in crontab. Note: Add your correct directory.
+- Docker Image run in background
 
 ```
-crontab -l | { cat; echo "*/3 * * * * $(pwd)/dyndns-cloudflare"; } | crontab -
+git clone https://github.com/renatogalera/dydns-cloudflare-update-go 
+
+cd dydns-cloudflare-update-go
+
+#First create edit/create conf.env first
+
+cp config.env.example config.env
+
+vim config.env
+
+docker build -t go-docker .
+
+docker run -d go-docker
 ```
