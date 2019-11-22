@@ -18,7 +18,7 @@ var CF_API_KEY string
 var CF_API_EMAIL string
 
 func writeConfig(result string) {
-	f, err := os.OpenFile(checkConfig(), os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	f, err := os.OpenFile(checkConfig(), os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0640)
 	if err != nil {
 		log.Fatal(err)
 	}
