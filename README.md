@@ -12,6 +12,8 @@ Add your subdmain **home.example.com**
 go mod download
 
 go build main.go
+
+./main
 ```
 
 - Docker Image run in background
