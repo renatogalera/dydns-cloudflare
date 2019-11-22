@@ -1,5 +1,7 @@
 ## DynDNS Cloudflare update
 
+Auto update your Dynamic IP in Cloudflare DNS.
+
 Provide your cloudflare account data in the file **config.env**
 
 Add your subdmain **home.example.com**
@@ -10,6 +12,8 @@ Add your subdmain **home.example.com**
 go mod download
 
 go build main.go
+
+./main
 ```
 
 - Docker Image run in background
@@ -25,7 +29,7 @@ cp config.env.example config.env
 
 vim config.env
 
-docker build -t go-docker .
+docker build -t dyndns-cf-go .
 
-docker run -d go-docker
+docker run -d dyndns-cf-go
 ```
