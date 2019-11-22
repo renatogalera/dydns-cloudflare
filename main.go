@@ -6,6 +6,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 
 	externalip "github.com/GlenDC/go-external-ip"
 	"github.com/cloudflare/cloudflare-go"
@@ -18,7 +19,7 @@ var CF_API_KEY string
 var CF_API_EMAIL string
 
 func writeConfig(result string) {
-	f, err := os.OpenFile(checkConfig(), os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0640)
+	f, err := os.OpenFile(checkConfig(), os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -37,7 +38,6 @@ func menuAPIdata() (labelprompt string, result string) {
 		"Set EMAIL":       "CF_API_EMAIL",
 	}
 	for k, v := range cfdata {
-		//fmt.Printf("%s %s\n", k, v)
 		labelprompt = k
 		prompt := promptui.Prompt{
 			Label: labelprompt,
@@ -108,7 +108,9 @@ func dynDNS() {
 	TARGETIP := getMyIP()
 	for _, r := range recs {
 		if TARGETIP == r.Content {
-			log.Fatal("IP has not changed!")
+			log.Println("IP has not changed!")
+			time.Sleep(120 * time.Second)
+			main()
 		}
 	}
 	newRecord := cloudflare.DNSRecord{
@@ -153,9 +155,12 @@ func getMyIP() string {
 }
 
 func main() {
+	log.SetOutput(os.Stdout)
 	err := loadConfig()
 	if err != nil {
 		log.Fatal("Error check ./config file", err)
 	}
-	dynDNS()
+	for {
+		dynDNS()
+	}
 }
