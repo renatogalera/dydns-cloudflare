@@ -27,7 +27,7 @@ cp config.env.example config.env
 
 vim config.env
 
-docker build -t go-docker .
+docker build -t dyndns-cf-go .
 
-docker run -d go-docker
+docker run -d dyndns-cf-go
 ```
