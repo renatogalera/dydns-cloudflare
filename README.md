@@ -1,6 +1,6 @@
 ## DynDNS Cloudflare update
 
-Change your Dynamic IP automatically in a DNS entry for a domain hosted on Cloudflare.
+Change automatically your Dynamic IP in a DNS hosted on Cloudflare. 
 
 Provide your cloudflare account data in the file **config.env**
 
