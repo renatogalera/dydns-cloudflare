@@ -46,6 +46,11 @@ go mod download
 go build main.go
 
 ./main
+
+#Add on linux crontab
+
+crontab -l | { cat; echo "@reboot $(pwd)/main"; } | crontab -
+
 ```
 
 
