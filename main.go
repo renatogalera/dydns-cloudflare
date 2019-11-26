@@ -3,7 +3,6 @@ package main
 import (
 	"log"
 	"os"
-	"path/filepath"
 	"strings"
 	"time"
 
@@ -16,24 +15,23 @@ var DOMAIN string
 var CF_API_KEY string
 var CF_API_EMAIL string
 
-func checkConfig() string {
-	currDir, err := filepath.Abs(filepath.Dir(os.Args[0]))
-	if err != nil {
-		log.Fatal(err)
-	}
-	configDir := (currDir + "/config.env")
-	return configDir
-}
-
 func loadConfig() error {
-	err := godotenv.Load(checkConfig())
+	err := godotenv.Load("config.env")
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
-	_ = godotenv.Load(checkConfig())
 	DOMAIN = os.Getenv("DOMAIN")
+	if DOMAIN == "" {
+		log.Fatal("Need to define DOMAIN var")
+	}
 	CF_API_KEY = os.Getenv("CF_API_KEY")
+	if CF_API_KEY == "" {
+		log.Fatal("Need to define CF_API_KEY var")
+	}
 	CF_API_EMAIL = os.Getenv("CF_API_EMAIL")
+	if CF_API_EMAIL == "" {
+		log.Fatal("Need to define CF_API_EMAIL var")
+	}
 	return nil
 }
 
@@ -49,7 +47,6 @@ func dynDNS() {
 		log.Println(err)
 		return
 	}
-	//Check ip change
 	aIP := cloudflare.DNSRecord{Name: DOMAIN}
 	recs, err := api.DNSRecords(zoneID, aIP)
 	TARGETIP := getMyIP()
