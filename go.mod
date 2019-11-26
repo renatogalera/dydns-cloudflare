@@ -1,4 +1,4 @@
-module https: //github.com/renatogalera/dydns-cloudflare-update-go/
+module https: //github.com/renatogalera/dydns-cloudflare/
 
 go 1.13
 
